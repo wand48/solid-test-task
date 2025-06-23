@@ -57,6 +57,8 @@ namespace Solid.TestTask
             {
                 DateOnly date = Date.GetDate(input);
 
+                Console.WriteLine($"\nНачало сохранения и импорта в Excel котировок валют с сайта ЦБ РФ на {date}.");
+
                 ValCurs valCurs = cbrService.GetQuotations(date);
 
                 foreach (var valute in valCurs.Valute)
@@ -70,7 +72,7 @@ namespace Solid.TestTask
 
                 rateService.ExportCrossRates(date);
 
-                Console.WriteLine($"\nИмпорт котировки валют с сайта ЦБ РФ выполнен.");
+                Console.WriteLine($"\nСохранение и импорт котировок валют с сайта ЦБ РФ на {date} выполнен.");
             }
             catch (ValidationException ex)
             {

@@ -59,45 +59,40 @@ namespace Solid.TestTask.Features.Rate
             var font = workbook.CreateFont();
             font.IsBold = true;
 
-            var headerStyle = ExcelHelpers.CreateBorderedCellStyle(workbook);
+            var headerStyle = Excel.CreateBorderedCellStyle(workbook);
             headerStyle.SetFont(font);
 
-            var numberStyle = ExcelHelpers.CreateBorderedCellStyleForNumber(workbook);
+            var numberStyle = Excel.CreateBorderedCellStyleForNumber(workbook);
             var dataFormat = workbook.CreateDataFormat();
             numberStyle.DataFormat = dataFormat.GetFormat("0.0000");
 
-            var textStyle = ExcelHelpers.CreateBorderedCellStyle(workbook);
+            var textStyle = Excel.CreateBorderedCellStyle(workbook);
 
             foreach (var fromCurrency in gcr)
             {
                 var sheet = workbook.CreateSheet(fromCurrency.Key);
 
                 var rowHeader = sheet.CreateRow(0);
-                var headerCell1 = rowHeader.CreateCell(0);
-                headerCell1.SetCellValue("Наименование");
-                headerCell1.CellStyle = headerStyle;
+                var headerCellName = Excel.CreateCell(rowHeader, 0, headerStyle);
+                headerCellName.SetCellValue("Наименование");
 
-                var headerCell2 = rowHeader.CreateCell(1);
-                headerCell2.SetCellValue("Кросс-курс");
-                headerCell2.CellStyle = headerStyle;
+                var headerCellCrossRate = Excel.CreateCell(rowHeader, 1, headerStyle);
+                headerCellCrossRate.SetCellValue("Кросс-курс");
 
                 int rowIndex = 1;
                 foreach (var toCurrency in fromCurrency)
                 {
                     var row = sheet.CreateRow(rowIndex);
-                    var nameCell = row.CreateCell(0);
+                    var nameCell = Excel.CreateCell(row, 0, textStyle);
                     nameCell.SetCellValue($"{fromCurrency.Key}/{toCurrency.ToCurrency}");
-                    nameCell.CellStyle = textStyle;
 
-                    var valueCell = row.CreateCell(1);
+                    var valueCell = Excel.CreateCell(row, 1, numberStyle);
                     valueCell.SetCellValue((double)toCurrency.CrossRate);
-                    valueCell.CellStyle = numberStyle;
 
                     rowIndex++;
                 }
 
-                sheet.AutoSizeColumn(0);
-                sheet.AutoSizeColumn(1);
+                sheet.AutoSizeColumns([0, 1]);
             }
 
             using var fileStream = new FileStream($"{date:yyyyMMdd}.xlsx", FileMode.Create);
