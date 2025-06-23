@@ -3,7 +3,7 @@ using NPOI.XSSF.UserModel;
 
 namespace Solid.TestTask.Helpers
 {
-    public static class ExcelHelpers
+    public static class Excel
     {
         public static ICellStyle CreateBorderedCellStyleForNumber(XSSFWorkbook workbook)
         {
@@ -24,6 +24,22 @@ namespace Solid.TestTask.Helpers
             style.WrapText = false;
 
             return style;
+        }
+
+        public static ICell CreateCell(IRow row, int index, ICellStyle cellStyle)
+        {
+            var cell = row.CreateCell(index);
+            cell.CellStyle = cellStyle;
+
+            return cell;
+        }
+
+        public static void AutoSizeColumns(this ISheet sheet, int[] indexes)
+        {
+            foreach (var index in indexes)
+            {
+                sheet.AutoSizeColumn(index);
+            }
         }
     }
 }
